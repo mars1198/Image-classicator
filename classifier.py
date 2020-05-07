@@ -41,29 +41,29 @@ def extract_features(list_images):
     nb_features = 2048
     features = np.empty((len(list_images), nb_features))
     labels = []
-
+    
     create_graph()
-
+    
     # pool_3:0: next-to-last layer containing 2048 float description of the image.
     # DecodeJpeg/contents:0:JPEG encoding of the image.
-
+    
     with tf.compat.v1.Session() as sess:
         next_to_last_tensor = sess.graph.get_tensor_by_name('pool_3:0')
-
+        
         for ind, image in enumerate(list_images):
             imlabel = image.split('/')[1]
-
+            
             # rough indication of progress
             if ind % 100 == 0:
                 print('Processing', image, imlabel)
             if not gfile.Exists(image):
                 tf.logging.fatal('File does not exist %s', image)
-
+                
             image_data = gfile.FastGFile(image, 'rb').read()
             predictions = sess.run(next_to_last_tensor, {'DecodeJpeg/contents:0': image_data})
             features[ind, :] = np.squeeze(predictions)
             labels.append(imlabel)
-
+    
     return features, labels
 
 
@@ -73,10 +73,10 @@ def extract_features(list_images):
 def plot_features(feature_labels, t_sne_features):
     
     plt.figure(figsize=(9, 9), dpi=100)
-
+    
     uniques = {x: labels.count(x) for x in feature_labels}
     od = collections.OrderedDict(sorted(uniques.items()))
-
+    
     colors = itertools.cycle(["r", "b", "g", "c", "m", "y",
                               "slategray", "plum", "cornflowerblue",
                               "hotpink", "darkorange", "forestgreen",
@@ -89,7 +89,7 @@ def plot_features(feature_labels, t_sne_features):
         c = (m + n) // 2
         plt.annotate(label, (t_sne_features[c, 0], t_sne_features[c, 1]))
         n = m
-
+    
     plt.show()
 
 
@@ -119,7 +119,7 @@ def run_classifier(clfr, x_train_data, y_train_data, x_test_data, y_test_data, a
     clfr.fit(x_train_data, y_train_data)
     y_pred = clfr.predict(x_test_data)
     print("%f seconds" % (time.time() - start_time))
-
+    
     # confusion matrix 
     print(acc_str.format(accuracy_score(y_test_data, y_pred) * 100))
     plot_confusion_matrix(y_test_data, y_pred, matrix_header_str)
