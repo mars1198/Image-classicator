@@ -30,7 +30,7 @@ images_dir = 'images2'
 
 def create_graph():
     
-    with tf.gfile.GFile(os.path.join(inceptionV3_dir, 'classify_image_graph_def.pb'), 'rb') as f:
+    with tf.io.gfile.GFile(os.path.join(inceptionV3_dir, 'classify_image_graph_def.pb'), 'rb') as f:
         graph_def = tf.compat.v1.GraphDef()
         graph_def.ParseFromString(f.read())
         _ = tf.import_graph_def(graph_def, name='')
@@ -100,7 +100,7 @@ def plot_confusion_matrix(y_true, y_pred, matrix_title):
     pred_labels = np.unique(y_pred)
     x_axis_labels = np.arange(len(true_labels))
     y_axis_labels = np.arange(len(pred_labels))
-    sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True, fmt='.2%', cmap='Blues')
+    sns.heatmap(cf_matrix/np.sum(cf_matrix, axis = 0), annot=True, fmt='.2%', cmap='Blues')
     plt.title(matrix_title, fontsize=12)
     plt.xticks(x_axis_labels, true_labels, rotation=90)
     plt.yticks(y_axis_labels, pred_labels, rotation=0)
