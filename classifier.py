@@ -93,20 +93,7 @@ def plot_features(feature_labels, t_sne_features):
     plt.show()
 
 
-#def plot_confusion_matrix(y_true, y_pred, matrix_title):
-#    plt.figure(figsize=(20, 20), dpi=100)
- #   cf_matrix = confusion_matrix(y_true, y_pred)
-  #  true_labels = np.unique(y_true)
-  #  pred_labels = np.unique(y_pred)
-   # x_axis_labels = np.arange(len(true_labels))
-    #y_axis_labels = np.arange(len(pred_labels))
-    #sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True, fmt='.2%', cmap='Blues')
-    #plt.title(matrix_title, fontsize=12)
-    #plt.xticks(x_axis_labels, true_labels, rotation=90)
-    #plt.yticks(y_axis_labels, pred_labels, rotation=0)
-    #plt.ylabel('True label', fontsize=10)
-    #plt.xlabel('Predicted label', fontsize=10)
-    #plt.show()
+
 
 def plot_confusion_matrix(y_true, y_pred, matrix_title):
     cm = confusion_matrix(y_true, y_pred, labels=np.unique(y_true))
